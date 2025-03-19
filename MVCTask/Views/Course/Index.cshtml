@@ -1,0 +1,69 @@
+﻿@model IEnumerable<MVCTask.Models.Course>
+
+@{
+    ViewData["Title"] = "Courses List";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-primary"><i class="fas fa-book-open"></i> Courses List</h2>
+        <a class="btn btn-success" asp-action="Create">
+            <i class="fas fa-plus-circle"></i> Add New Course
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center">
+            <i class="fas fa-exclamation-circle"></i> No courses available.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th><i class="fas fa-book"></i> Name</th>
+                        <th><i class="fas fa-align-left"></i> Description</th>
+                        <th><i class="fas fa-calendar-alt"></i> Start Date</th>
+                        <th><i class="fas fa-calendar-check"></i> End Date</th>
+                        <th><i class="fas fa-chalkboard-teacher"></i> Instructor</th>
+                        <th><i class="fas fa-tools"></i> Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var course in Model)
+                    {
+                        <tr>
+                            <td>@course.Name</td>
+                            <td>@(string.IsNullOrWhiteSpace(course.Description) ? "No Description" : course.Description)</td>
+                            <td>@course.StartDate.ToString("dd MMM yyyy")</td>
+                            <td>@course.EndDate.ToString("dd MMM yyyy")</td>
+                            <td>@(course.Instructor?.Name ?? "Not Assigned")</td>
+                            <td>
+                                <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@course.CourseId">
+                                    <i class="fas fa-info-circle"></i> Details
+                                </a>
+                                <a class="btn btn-warning btn-sm text-white" asp-action="Edit" asp-route-id="@course.CourseId">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@course.CourseId">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
